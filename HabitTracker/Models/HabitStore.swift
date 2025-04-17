@@ -21,17 +21,33 @@ class HabitStore: ObservableObject {
     }
     
     func markHabitDone(_ habitID: UUID) {
+        guard let index = habits.firstIndex(where: { $0.id == habitID }) else { return }
+
         let today = Habit.dateToString(Date())
-        
-        if let index = habits.firstIndex(where: { $0.id == habitID }) {
-            habits[index].completionHitory[today] = true
-            save()
-        }
+        habits[index].completionHistory[today] = true
+
+        save()
     }
     
     func isHabitDone(_ habit: Habit, on date: Date) -> Bool {
         let key = Habit.dateToString(date)
-        return habit.completionHitory[key] ?? false
+        return habit.completionHistory[key] ?? false
+    }
+    
+    func addMockHabit(name: String) -> Void {
+        var newHabit = Habit(name: name)
+        let dates = Habit.datesBackwards(from: Date(), count: 120)
+        
+        for date in dates{
+            if Bool.random(){
+                let key = Habit.dateToString(date)
+                newHabit.completionHistory[key] = true
+            }
+        }
+        
+        habits.append(newHabit)
+        save()
+        
     }
     
     private func save() {

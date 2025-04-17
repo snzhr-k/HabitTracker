@@ -3,7 +3,7 @@ import Foundation
 struct Habit: Identifiable, Codable {
     var id = UUID()
     var name: String
-    var completionHitory: [String:Bool] = [:]
+    var completionHistory: [String:Bool] = [:]
     
     //Date formatting funciton
     static func dateToString(_ date: Date) -> String {
@@ -20,7 +20,7 @@ struct Habit: Identifiable, Codable {
     
     func isCompleted(on date: Date)-> Bool {
         let key = Self.dateToString(date)
-        return completionHitory[key] ?? false
+        return completionHistory[key] ?? false
     }
     
     func currentSteak(asOf referenceDate: Date = Date()) -> Int {
@@ -28,7 +28,7 @@ struct Habit: Identifiable, Codable {
         let dates = Self.datesBackwards(from: referenceDate, count: 120)
         
         for date in dates.reversed(){
-            if isCompleted(on: <#T##Date#>){
+            if isCompleted(on: date ){
                 streak += 1
             }
             else{
